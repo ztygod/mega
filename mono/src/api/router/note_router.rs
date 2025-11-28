@@ -2,12 +2,12 @@ use crate::api::MonoApiServiceState;
 use crate::api::error::ApiError;
 use crate::server::http_server::SYNC_NOTES_STATE_TAG;
 
-use crate::api::notes::model::{ShowResponse, UpdateRequest};
-
 use axum::{
     Json,
     extract::{Path, State},
 };
+use ceres::model::note::{GetNotesParams, GetNotesRes, ShowResponse, UpdateRequest};
+use common::model::CommonResult;
 use serde_json::Value;
 use utoipa_axum::router::OpenApiRouter;
 use utoipa_axum::routes;
@@ -104,3 +104,21 @@ async fn update_note(
 
     Ok(Json(serde_json::json!({})))
 }
+
+/// Get all notes  
+// #[utoipa::path(  
+//     get,  
+//     path = "/{org_slug}/notes",  
+//     request_body = GetNotesParams,  
+//     responses(  
+//         (status = 200, body = GetNotesData, content_type = "application/json"),  
+//         (status = 400, body = CommonResult<String>, content_type = "application/json")  
+//     ),  
+//     tag = SYNC_NOTES_STATE_TAG,  
+// )]  
+// async fn get_notes(  
+//     State(state): State<MonoApiServiceState>,
+//     Json(json): Json<GetNotesParams>
+// ) -> Result<Json<CommonResult<GetNotesRes>>, ApiError> {  
+    
+// }

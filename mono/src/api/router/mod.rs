@@ -10,3 +10,4 @@ pub mod preview_router;
 pub mod repo_router;
 pub mod tag_router;
 pub mod user_router;
+pub mod note_router;

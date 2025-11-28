@@ -4,7 +4,7 @@ use callisto::notes;
 use common::errors::MegaError;
 use sea_orm::{ActiveModelTrait, ActiveValue::Set, EntityTrait, IntoActiveModel};
 
-use crate::storage::base_storage::{BaseStorage, StorageConnector};
+use crate::{model::note_dto::GetNotesParams, storage::base_storage::{BaseStorage, StorageConnector}};
 
 #[derive(Clone)]
 pub struct NoteStorage {
@@ -25,6 +25,17 @@ impl NoteStorage {
             .await?;
         Ok(model)
     }
+    pub async fn get_notes(&self, params: GetNotesParams) -> Result<Option<Vec<notes::Model>>, MegaError> {  
+        let models = notes::Entity::find()  
+            .all(self.get_connection())  
+            .await?;  
+        
+        if models.is_empty() {  
+            Ok(None)  
+        } else {  
+            Ok(Some(models))  
+        }  
+    }   
     pub async fn save_note(&self, note: notes::Model) -> Result<(), MegaError> {
         let a_model = note.into_active_model();
         a_model.insert(self.get_connection()).await?;

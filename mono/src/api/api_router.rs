@@ -15,10 +15,9 @@ use utoipa_axum::{router::OpenApiRouter, routes};
 use crate::api::{
     MonoApiServiceState,
     error::ApiError,
-    notes::note_router,
     router::{
         cl_router, commit_router, conv_router, gpg_router, issue_router, label_router,
-        merge_queue_router, preview_router, repo_router, tag_router, user_router,
+        merge_queue_router, preview_router, repo_router, tag_router, user_router, note_router
     },
 };
 use crate::server::http_server::SYSTEM_COMMON;

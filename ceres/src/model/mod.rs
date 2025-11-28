@@ -10,3 +10,4 @@ pub mod merge_queue;
 pub mod tag;
 pub mod third_party;
 pub mod user;
+pub mod note;

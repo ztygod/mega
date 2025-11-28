@@ -25,6 +25,7 @@ use crate::lfs_storage::{self, LfsFileStorage, local_storage::LocalStorage};
 use crate::service::cl_service::CLService;
 use crate::service::issue_service::IssueService;
 use crate::service::merge_queue_service::MergeQueueService;
+use crate::service::note_service::NoteService;
 use crate::storage::conversation_storage::ConversationStorage;
 use crate::storage::init::database_connection;
 use crate::storage::{
@@ -87,6 +88,7 @@ impl AppService {
 pub struct Storage {
     pub(crate) app_service: Arc<AppService>,
     pub issue_service: IssueService,
+    pub note_service: NoteService,
     pub cl_service: CLService,
     pub merge_queue_service: MergeQueueService,
     pub config: Weak<Config>,
@@ -138,6 +140,7 @@ impl Storage {
             app_service: app_service.into(),
             config: Arc::downgrade(&config),
             issue_service: IssueService::new(base.clone()),
+            note_service: NoteService::new(base.clone()),
             cl_service: CLService::new(base.clone()),
             merge_queue_service,
         }
@@ -219,6 +222,7 @@ impl Storage {
         Storage {
             app_service: AppService::mock(),
             issue_service: IssueService::mock(),
+            note_service: NoteService::mock(),
             cl_service: CLService::mock(),
             merge_queue_service: MergeQueueService::mock(),
             config: Arc::downgrade(&*CONFIG),
