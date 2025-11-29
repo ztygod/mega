@@ -1,7 +1,4 @@
-use serde::{Deserialize, Serialize};  
-use sea_orm::entity::prelude::*;  
-  
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NoteDto {
@@ -17,12 +14,10 @@ pub struct NoteDto {
 
     // pub project_id: Option<String>,
     // pub member_id: String,
-
     pub comments_count: i64,
     pub resolved_comments_count: i64,
 }
 
-  
 /// Query parameters for getting notes (internal)  
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetNotesParams {

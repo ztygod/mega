@@ -4,7 +4,10 @@ use callisto::notes;
 use common::errors::MegaError;
 use sea_orm::{ActiveModelTrait, ActiveValue::Set, EntityTrait, IntoActiveModel};
 
-use crate::{model::note_dto::GetNotesParams, storage::base_storage::{BaseStorage, StorageConnector}};
+use crate::{
+    model::note_dto::GetNotesParams,
+    storage::base_storage::{BaseStorage, StorageConnector},
+};
 
 #[derive(Clone)]
 pub struct NoteStorage {
@@ -25,17 +28,17 @@ impl NoteStorage {
             .await?;
         Ok(model)
     }
-    pub async fn get_notes(&self, params: GetNotesParams) -> Result<Option<Vec<notes::Model>>, MegaError> {  
-        let models = notes::Entity::find()  
-            .all(self.get_connection())  
-            .await?;  
-        
-        if models.is_empty() {  
-            Ok(None)  
-        } else {  
-            Ok(Some(models))  
-        }  
-    }   
+    // pub async fn get_notes(
+    //     &self,
+    //     params: GetNotesParams,
+    // ) -> Result<Option<Vec<notes::Model>>, MegaError> {
+    //     let models = notes::Entity::find().all(self.get_connection()).await?;
+
+    //     if models.is_empty() {
+    //         Ok(None)
+    //     } else {
+    //         Ok(Some(models))
+    //     }
     pub async fn save_note(&self, note: notes::Model) -> Result<(), MegaError> {
         let a_model = note.into_active_model();
         a_model.insert(self.get_connection()).await?;
@@ -82,6 +85,23 @@ impl NoteStorage {
         active_model.description_schema_version = Set(description_schema_version);
         let updated_model = active_model.update(self.get_connection()).await?;
         Ok(updated_model.id as i32)
+    }
+
+    pub async fn put_note(
+        &self,
+        id: i32,
+        title: Option<String>,
+    ) -> Result<notes::Model, MegaError> {
+        let model = notes::Entity::find_by_id(id)
+            .one(self.get_connection())
+            .await?
+            .ok_or_else(|| MegaError::with_message(format!("Note with ID {id} not found")))?;
+
+        let mut active_model: notes::ActiveModel = model.into();
+        active_model.title = Set(title);
+
+        let updated_model = active_model.update(self.get_connection()).await?;
+        Ok(updated_model)
     }
 }
 

@@ -10,6 +10,7 @@ use crate::migration::apply_migrations;
 use crate::service::cl_service::CLService;
 use crate::service::issue_service::IssueService;
 use crate::service::merge_queue_service::MergeQueueService;
+use crate::service::note_service::NoteService;
 use crate::storage::base_storage::{BaseStorage, StorageConnector};
 use crate::storage::gpg_storage::GpgStorage;
 use crate::storage::merge_queue_storage::MergeQueueStorage;
@@ -70,6 +71,7 @@ pub async fn test_storage(temp_dir: impl AsRef<Path>) -> Storage {
     Storage {
         app_service: Arc::new(svc),
         issue_service: IssueService::mock(),
+        note_service: NoteService::mock(),
         cl_service: CLService::mock(),
         merge_queue_service: MergeQueueService::mock(),
         config: Arc::downgrade(&config),
