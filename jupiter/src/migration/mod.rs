@@ -71,6 +71,12 @@ mod m20251117_101804_add_commit_id_in_mega_tree;
 mod m20251117_181240_add_system_required_field_for_reviewer;
 mod m20251119_145041_add_draft_status;
 mod m20251125_135032_add_draft_conv_type;
+mod m20251129_081736_add_project;
+mod m20251129_084603_add_organization_memberships;
+mod m20251129_094715_add_comment;
+mod m20251130_005643_add_followup;
+mod m20251130_013638_add_permission;
+mod m20251130_021900_add_user;
 
 /// Creates a primary key column definition with big integer type.
 ///
@@ -130,6 +136,12 @@ impl MigratorTrait for Migrator {
             Box::new(m20251117_181240_add_system_required_field_for_reviewer::Migration),
             Box::new(m20251119_145041_add_draft_status::Migration),
             Box::new(m20251125_135032_add_draft_conv_type::Migration),
+            Box::new(m20251129_081736_add_project::Migration),
+            Box::new(m20251129_084603_add_organization_memberships::Migration),
+            Box::new(m20251129_094715_add_comment::Migration),
+            Box::new(m20251130_005643_add_followup::Migration),
+            Box::new(m20251130_013638_add_permission::Migration),
+            Box::new(m20251130_021900_add_user::Migration),
         ]
     }
 }

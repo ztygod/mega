@@ -1,4 +1,6 @@
 pub mod check_result;
+pub mod comment;
+pub mod follow_up;
 pub mod item_assignees;
 pub mod item_labels;
 pub mod label;
@@ -6,7 +8,10 @@ pub mod mega_cl;
 pub mod mega_conversation;
 pub mod mega_issue;
 pub mod mega_refs;
+pub mod note;
+pub mod permission;
 pub mod reactions;
+pub mod user;
 
 use idgenerator::IdInstance;
 use rand::Rng;
