@@ -264,5 +264,5 @@ default_items = [
     { public_id = "mq", label = "Merge Queue", href = "/queue/main", visible = true, order_index = 9 },
     { public_id = "issue", label = "Issue", href = "/issue", visible = true, order_index = 10 },
     { public_id = "rust", label = "Rust", href = "/rust", visible = false, order_index = 11 },
-    { public_id = "oc", label = "Orion Client", href = "/oc", visible = true, order_index = 13 },
+    { public_id = "oc", label = "Orion Client", href = "/oc", visible = true, order_index = 12 },
 ]

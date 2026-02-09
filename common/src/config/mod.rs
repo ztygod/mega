@@ -876,17 +876,16 @@ impl Default for BuckConfig {
     }
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SidebarConfig {
     pub default_items: Vec<SidebarItem>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SidebarItem {
     pub public_id: String,
     pub label: String,
     pub href: String,
-    #[serde(default = "default_visible")]
     pub visible: bool,
     pub order_index: i32,
 }
@@ -896,33 +895,99 @@ impl Default for SidebarConfig {
         Self {
             default_items: vec![
                 SidebarItem {
-                    public_id: "home".to_string(),
-                    label: "Home".to_string(),
-                    href: "/posts".to_string(),
+                    public_id: "home".into(),
+                    label: "Home".into(),
+                    href: "/posts".into(),
                     visible: true,
                     order_index: 0,
                 },
                 SidebarItem {
-                    public_id: "inbox".to_string(),
-                    label: "Inbox".to_string(),
-                    href: "/inbox".to_string(),
+                    public_id: "inbox".into(),
+                    label: "Inbox".into(),
+                    href: "/inbox".into(),
                     visible: true,
                     order_index: 1,
                 },
                 SidebarItem {
-                    public_id: "docs".to_string(),
-                    label: "Docs".to_string(),
-                    href: "/notes".to_string(),
+                    public_id: "chat".into(),
+                    label: "Chat".into(),
+                    href: "/chat".into(),
                     visible: true,
                     order_index: 2,
+                },
+                SidebarItem {
+                    public_id: "notes".into(),
+                    label: "Docs".into(),
+                    href: "/notes".into(),
+                    visible: true,
+                    order_index: 3,
+                },
+                SidebarItem {
+                    public_id: "calls".into(),
+                    label: "Calls".into(),
+                    href: "/calls".into(),
+                    visible: false,
+                    order_index: 4,
+                },
+                SidebarItem {
+                    public_id: "drafts".into(),
+                    label: "Drafts".into(),
+                    href: "/drafts".into(),
+                    visible: true,
+                    order_index: 5,
+                },
+                SidebarItem {
+                    public_id: "code".into(),
+                    label: "Code".into(),
+                    href: "/code".into(),
+                    visible: true,
+                    order_index: 6,
+                },
+                SidebarItem {
+                    public_id: "tags".into(),
+                    label: "Tags".into(),
+                    href: "/code/tags".into(),
+                    visible: true,
+                    order_index: 7,
+                },
+                SidebarItem {
+                    public_id: "cl".into(),
+                    label: "Change List".into(),
+                    href: "/cl".into(),
+                    visible: true,
+                    order_index: 8,
+                },
+                SidebarItem {
+                    public_id: "mq".into(),
+                    label: "Merge Queue".into(),
+                    href: "/queue/main".into(),
+                    visible: true,
+                    order_index: 9,
+                },
+                SidebarItem {
+                    public_id: "issue".into(),
+                    label: "Issue".into(),
+                    href: "/issue".into(),
+                    visible: true,
+                    order_index: 10,
+                },
+                SidebarItem {
+                    public_id: "rust".into(),
+                    label: "Rust".into(),
+                    href: "/rust".into(),
+                    visible: false,
+                    order_index: 11,
+                },
+                SidebarItem {
+                    public_id: "oc".into(),
+                    label: "Orion Client".into(),
+                    href: "/oc".into(),
+                    visible: true,
+                    order_index: 12,
                 },
             ],
         }
     }
-}
-
-fn default_visible() -> bool {
-    true
 }
 
 #[cfg(test)]
@@ -1060,5 +1125,36 @@ mod test {
             ..Default::default()
         };
         assert!(config.validate().is_ok());
+    }
+
+    #[test]
+    fn test_sidebar_config_deserialize() {
+        let toml_str = r#"
+        [sidebar]
+        default_items = [
+            { public_id = "home", label = "Home", href = "/posts", visible = true, order_index = 0 },
+            { public_id = "inbox", label = "Inbox", href = "/inbox", visible = true, order_index = 1 },
+            { public_id = "chat", label = "Chat", href = "/chat", visible = false, order_index = 2 }
+        ]
+        "#;
+
+        let builder =
+            c::Config::builder().add_source(c::File::from_str(toml_str, c::FileFormat::Toml));
+
+        let config = builder.build().unwrap();
+
+        #[derive(Deserialize, Debug)]
+        struct Config {
+            #[serde(default)]
+            sidebar: SidebarConfig,
+        }
+
+        let root: Config = config.try_deserialize().unwrap();
+
+        println!("{:#?}", root.sidebar);
+
+        assert_eq!(root.sidebar.default_items.len(), 3);
+        assert_eq!(root.sidebar.default_items[1].visible, true);
+        assert_eq!(root.sidebar.default_items[2].visible, false);
     }
 }
